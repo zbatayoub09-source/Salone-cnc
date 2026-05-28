@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,21 +38,23 @@ header{
   width:100%;
   height:220px;
   object-fit:cover;
+  cursor:pointer;
 }
 
 .content{
   padding:15px;
+  text-align:center;
 }
 
 .btn{
   display:block;
-  text-align:center;
-  background:#27ae60;
+  background:#25D366;
   color:white;
   padding:10px;
   text-decoration:none;
   border-radius:8px;
   margin-top:10px;
+  font-weight:bold;
 }
 
 </style>
@@ -60,7 +63,7 @@ header{
 <body>
 
 <header>
-🔥 Salon Marocain Moderne
+🔥 Quran CNC Store
 </header>
 
 <div class="grid" id="products"></div>
@@ -69,25 +72,38 @@ header{
 
 <script>
 
+const whatsappNumber = "212622765085"; // بدلو برقمك
+
 fetch("products.csv")
 .then(response => response.text())
 .then(csv => {
 
   const data = Papa.parse(csv,{
-    header:true
+    header:true,
+    skipEmptyLines:true
   }).data;
 
   let html = "";
 
   data.forEach(p => {
 
-    if(!p.Title) return;
+    if(!p.Title || !p.Image) return;
+
+    let productLink = p.Image;
+
+    let message = encodeURIComponent(
+      "Hello, I want this design:\n\n" +
+      p.Title +
+      "\n\nImage Link:\n" +
+      productLink
+    );
 
     html += `
 
     <div class="card">
 
       <img src="${p.Image}"
+      onclick="window.open('${p.Image}')"
       onerror="this.src='https://via.placeholder.com/300'">
 
       <div class="content">
@@ -95,10 +111,10 @@ fetch("products.csv")
         <h3>${p.Title}</h3>
 
         <a class="btn"
-        href="${p.Download}"
+        href="https://wa.me/${whatsappNumber}?text=${message}"
         target="_blank">
 
-        ⬇ Download
+        📩 WhatsApp
 
         </a>
 
@@ -118,3 +134,4 @@ fetch("products.csv")
 
 </body>
 </html>
+```
